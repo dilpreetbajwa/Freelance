@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import user from "../../assets/user.png"
+import user from "../../assets/user1.jpg"
 import "./Navbar.scss";
 
 function Navbar() {

@@ -1,10 +1,15 @@
-import React from 'react'
-import "./Home.scss"
+import React from "react";
+import "./Home.scss";
+import Featured from "../../components/featured/Featured";
+import TrustedBy from "../../components/trustedBy/TrustedBy";
 
-const Home = () => {
+function Home() {
   return (
-    <div>Home</div>
-  )
+    <div className="home">
+      <Featured /> 
+      <TrustedBy />
+    </div>
+  );
 }
 
-export default Home
+export default Home;
