@@ -1,7 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./Gigs.scss";
+import { useQuery } from "@tanstack/react-query";
 import { gigs } from "../../data";
 import GigCard from "../../components/gigCard/GigCard";
+import newRequest from "../../utils/newRequest";
+import { useLocation } from "react-router-dom";
 
 function Gigs() {
   const [sort, setSort] = useState("sales");
@@ -9,15 +12,39 @@ function Gigs() {
   const minRef = useRef();
   const maxRef = useRef();
 
+  const { search } = useLocation();
+
+  const { isLoading, error, data, refetch } = useQuery({
+    queryKey: ["gigs"],
+    queryFn: () =>
+      newRequest
+        .get(
+          `/gigs${search}&min=${minRef.current.value}&max=${maxRef.current.value}&sort=${sort}`
+        )
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  console.log(data);
+
   const reSort = (type) => {
     setSort(type);
     setOpen(false);
   };
 
-  const apply = ()=>{
-    console.log(minRef.current.value)
-    console.log(maxRef.current.value)
-  }
+  useEffect(() => {
+    refetch();
+  }, [sort]);
+
+  const apply = () => {
+    refetch();
+  };
+
+  // const apply = ()=>{
+  //   console.log(minRef.current.value)
+  //   console.log(maxRef.current.value)
+  // }
 
   return (
     <div className="gigs">
@@ -53,9 +80,14 @@ function Gigs() {
           </div>
         </div>
         <div className="cards">
-          {gigs.map((gig) => (
+          {/* {gigs.map((gig) => (
             <GigCard key={gig.id} item={gig} />
-          ))}
+          ))} */}
+          {isLoading
+            ? "loading"
+            : error
+            ? "Something went wrong!"
+            : data.map((gig) => <GigCard key={gig._id} item={gig} />)}
         </div>
       </div>
     </div>

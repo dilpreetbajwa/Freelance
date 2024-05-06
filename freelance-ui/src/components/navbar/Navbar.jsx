@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import newRequest from "../../utils/newRequest";
 import user from "../../assets/user1.jpg"
 import "./Navbar.scss";
 
@@ -20,13 +21,27 @@ function Navbar() {
     };
   }, []);
 
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await newRequest.post("/auth/logout");
+      localStorage.setItem("currentUser", null);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
    //const currentUser = null
 
-  const currentUser = {
-    id: 1,
-    username: "Anna",
-    isSeller: true,
-  };
+  // const currentUser = {
+  //   id: 1,
+  //   username: "Anna",
+  //   isSeller: true,
+  // };
 
   return (
     <div className={active || pathname !== "/" ? "navbar active" : "navbar"}>
@@ -66,14 +81,14 @@ function Navbar() {
                 <Link className="link" to="/messages">
                   Messages
                 </Link>
-                <Link className="link" to="/">
+                <Link className="link" onClick={handleLogout}>
                   Logout
                 </Link>
               </div>}
             </div>
           ) : (
             <>
-              <span>Sign in</span>
+               <Link to="/login" className="link">Sign in</Link>
               <Link className="link" to="/register">
                 <button>Join</button>
               </Link>
