@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./Featured.scss";
 import { useNavigate } from "react-router-dom";
+import Lottie from "lottie-react";
+import Animationright from "../../Animation-right.json";
 
 function Featured() {
   const [input, setInput] = useState("");
@@ -36,7 +38,8 @@ function Featured() {
           </div>
         </div>
         <div className="right">
-          <img src="./img/man.png" alt="" />
+          {/* <img src="./img/man.png" alt="" /> */}
+          <Lottie animationData={Animationright} loop={true} />
         </div>
       </div>
     </div>
